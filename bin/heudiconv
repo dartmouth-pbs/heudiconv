@@ -995,6 +995,8 @@ def convert(items, symlink=True, converter=None,
                 if len(outname_bids_files) > 1:
                     lgr.warning(
                         "For now not embedding BIDS and info generated .nii.gz itself since sequence produced multiple files")
+                elif not outname_bids_files:
+                    lgr.debug("No BIDS files were produced, nothing to embed to then")
                 else:
                     #if not is_bids or converter != 'dcm2niix': ##uses dcm2niix's infofile
                     embed_metadata_from_dicoms(converter, is_bids, item_dicoms,
