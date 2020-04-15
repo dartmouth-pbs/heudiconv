@@ -4,6 +4,32 @@ All notable changes to this project will be documented (for humans) in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.7.1] - 2020-04-15
+
+### Enhancements
+
+- Centralized saving of .json files.  Indentation of some files could
+  change now from previous versions where it could have used `3`
+  spaces. Now indentation should be consistently `2` for .json files
+  we produce/modify (#436) (note: dcm2niix uses tabs for indentation)
+- ReproIn heuristic: support SBRef and phase data (#387)
+- Set the "TaskName" field in .json sidecar files for multi-echo data
+  (#420)
+- Provide an informative exception if command needs heuristic to be
+  specified (#437)
+
+### Refactored
+
+- `embed_nifti` was refactored into `embed_dicom_and_nifti_metadata`
+  which would no longer create `.nii` file if it does not exist
+  already (#432)
+
+### Fixed
+
+- Skip datalad-based tests if no datalad available (#430)
+- Search heuristic file path first so we do not pick up a python
+  module if name conflicts (#434)
+
 ## [0.7.0] - 2020-03-20
 
 ### Removed
