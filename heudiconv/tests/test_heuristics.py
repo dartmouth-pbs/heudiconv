@@ -111,13 +111,15 @@ def test_scans_keys_reproin(tmpdir, invocation):
         reader = csv.reader(f, delimiter='\t')
         for i, row in enumerate(reader):
             if i == 0:
-                assert(row == ['filename', 'acq_time', 'operator', 'randstr'])
-            assert(len(row) == 4)
+                assert(row == ['filename', 'acq_time', 'acq_time_precise', 'operator', 'randstr'])
+            assert(len(row) == 5)
             if i != 0:
                 assert(os.path.exists(pjoin(dirname(scans_keys[0]), row[0])))
-                assert(re.match(
-                    '^[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}.[\d]{6}$',
-                    row[1]))
+                bidsdatetime_regex = '^[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}$'
+                # regular acq_time without .microseconds since BIDS did not envision it
+                assert(re.match(bidsdatetime_regex, row[1]))
+                # acq_time_precise
+                assert(re.match(bidsdatetime_regex.replace("$", ".[\d]{6}$"), row[2]))
 
 
 @patch('sys.stdout', new_callable=StringIO)

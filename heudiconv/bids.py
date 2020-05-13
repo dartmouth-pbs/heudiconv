@@ -33,6 +33,10 @@ SCANS_FILE_FIELDS = OrderedDict([
     ("acq_time", OrderedDict([
         ("LongName", "Acquisition time"),
         ("Description", "Acquisition time of the particular scan")])),
+    ("acq_time_precise", OrderedDict([
+        ("LongName", "Acquisition time precise"),
+        ("Description", "Acquisition time of the particular scan "
+                        "(with microseconds if available)")])),
     ("operator", OrderedDict([
         ("Description", "Name of the operator")])),
     ("randstr", OrderedDict([
@@ -399,7 +403,7 @@ def get_formatted_scans_key_row(dcm_fn):
     Returns
     -------
     row: list
-        [ISO acquisition time, performing physician name, random string]
+        [date time, date time (with microseconds), performing physician name, random string]
 
     """
     dcm_data = dcm.read_file(dcm_fn, stop_before_pixels=True, force=True)
@@ -424,7 +428,7 @@ def get_formatted_scans_key_row(dcm_fn):
         perfphys = dcm_data.PerformingPhysicianName
     except AttributeError:
         perfphys = ''
-    row = [acq_time, perfphys, randstr]
+    row = [acq_time.split('.')[0], acq_time, perfphys, randstr]
     # empty entries should be 'n/a'
     # https://github.com/dartmouth-pbs/heudiconv/issues/32
     row = ['n/a' if not str(e) else e for e in row]

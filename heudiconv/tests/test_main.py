@@ -115,7 +115,6 @@ def test_prepare_for_datalad(tmpdir):
 
     from datalad.api import Dataset
     superds = Dataset(str(tmpdir))
-
     assert superds.is_installed()
     assert not superds.repo.dirty
     subdss = superds.subdatasets(recursive=True, result_xfm='relpaths')
@@ -172,14 +171,15 @@ def test_get_formatted_scans_key_row():
          % TESTS_DATA_PATH
 
     row1 = get_formatted_scans_key_row(dcm_fn)
-    assert len(row1) == 3
-    assert row1[0] == '2016-10-14T09:26:36.693000'
-    assert row1[1] == 'n/a'
-    prandstr1 = row1[2]
+    assert len(row1) == 4
+    assert row1[0] == '2016-10-14T09:26:36'
+    assert row1[1] == '2016-10-14T09:26:36.693000'
+    assert row1[2] == 'n/a'
+    prandstr1 = row1[3]
 
     # if we rerun - should be identical!
     row2 = get_formatted_scans_key_row(dcm_fn)
-    prandstr2 = row2[2]
+    prandstr2 = row2[3]
     assert(prandstr1 == prandstr2)
     assert(row1 == row2)
     # So it is consistent across pythons etc, we use explicit value here
@@ -189,7 +189,7 @@ def test_get_formatted_scans_key_row():
     row3 = get_formatted_scans_key_row(
         "%s/01-anat-scout/0001.dcm" % TESTS_DATA_PATH)
     assert(row3 != row1)
-    prandstr3 = row3[2]
+    prandstr3 = row3[3]
     assert(prandstr1 != prandstr3)
     assert(prandstr3 == "fae3befb")
 
@@ -211,7 +211,7 @@ def test_add_rows_to_scans_keys_file(tmpdir):
                 rows_loaded.append(row)
         for i, row_ in enumerate(rows_loaded):
             if i == 0:
-                assert(row_ == ['filename', 'acq_time', 'operator', 'randstr'])
+                assert(row_ == ['filename', 'acq_time', 'acq_time_precise', 'operator', 'randstr'])
             else:
                 assert(rows[row_[0]] == row_[1:])
         # dates, filename should be sorted (date "first", filename "second")
